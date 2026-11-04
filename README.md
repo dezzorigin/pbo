@@ -1,15 +1,35 @@
 # Pbo
 
-Pbo project.
+Pbo — project by Nabil Aulia Dika (dezzorigin).
 
-## Tech stack
+## Status Proyek
 
-Misc
+**Dalam pengembangan** _(README ada)_
 
-## Getting started
+## Tech Stack
 
-See project files for setup instructions.
+Mixed / Static
 
-## License
+## Struktur Proyek
 
-MIT
+```
+.gitignore
+Circle.class
+Circle.java
+CylinderS.class
+CylinderS.java
+Main.class
+Main.java
+README.md
+```
+
+## Getting Started
+
+Buka file `index.html` di browser, atau serve folder dengan static server.
+
+## Lisensi
+
+MIT — lihat file [LICENSE](./LICENSE).
+
+---
+_Dibuat dan dikelola oleh Nabil Aulia Dika. Kontribusi dan issue welcome._
