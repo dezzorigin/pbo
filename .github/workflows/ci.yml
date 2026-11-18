@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "21"
+
+      - name: Pastikan tidak ada file .class yang ter-commit
+        run: |
+          if git ls-files | grep -q '\.class$'; then
+            echo "file .class masih ter-commit:"
+            git ls-files | grep '\.class$'
+            exit 1
+          fi
+          echo "bersih: tidak ada .class di tree"
+
+      - name: Compile
+        run: javac -d out Circle.java CylinderS.java Main.java
+
+      - name: Jalankan demo & verifikasi output
+        run: |
+          java -cp out Main | tee output.txt
+          grep -q "Volume : 31.41592653589793" output.txt
+          grep -q "Volume : 2309.070600388498" output.txt
+          echo "output terverifikasi: volume silinder 1 & 2 benar"

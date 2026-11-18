@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pbo — Latihan Inheritance Java</title>
+<meta name="description" content="pbo: contoh inheritance Java yang kecil dan lengkap. Circle → CylinderS, tiga file, nol dependensi, output terverifikasi.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%232563eb'/%3E%3Ctext x='16' y='23' font-family='Arial,sans-serif' font-size='19' font-weight='bold' fill='white' text-anchor='middle'%3EP%3C/text%3E%3C/svg%3E">
+<style>
+  :root { --ink:#111827; --muted:#6b7280; --line:#e5e7eb; --bg:#ffffff; --soft:#f9fafb; --accent:#2563eb; --accent-soft:#eef4ff; --term:#0f172a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { font-family: -apple-system, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; color: var(--ink); background: var(--bg); line-height: 1.6; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+  .wrap { max-width: 1080px; margin: 0 auto; padding: 0 24px; }
+
+  /* nav */
+  nav { position: sticky; top: 0; z-index: 10; background: rgba(255,255,255,.92); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
+  .nav-in { max-width: 1080px; margin: 0 auto; padding: 0 24px; height: 60px; display: flex; align-items: center; gap: 28px; }
+  .logo { font-weight: 800; font-size: 20px; color: var(--ink); letter-spacing: -.02em; display: flex; align-items: center; gap: 10px; }
+  .logo-badge { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; border-radius: 8px; background: var(--accent); color: #fff; font-size: 15px; font-weight: 800; }
+  .nav-links { display: flex; gap: 22px; font-size: 15px; }
+  .nav-links a { color: #374151; }
+  .nav-links a:hover { color: var(--ink); text-decoration: none; }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+  .gh-link { display: inline-flex; align-items: center; gap: 8px; color: var(--ink); font-size: 14px; font-weight: 600; border: 1px solid var(--line); border-radius: 999px; padding: 7px 14px; background: #fff; }
+  .gh-link:hover { text-decoration: none; background: var(--soft); }
+  .gh-link svg { width: 18px; height: 18px; }
+
+  /* hero */
+  header.hero { padding: 72px 0 64px; }
+  .hero-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 48px; align-items: center; }
+  .eyebrow { display: inline-block; font-size: 13px; font-weight: 700; letter-spacing: .04em; text-transform: uppercase; color: var(--accent); background: var(--accent-soft); border-radius: 999px; padding: 5px 12px; margin-bottom: 18px; }
+  h1 { font-size: clamp(34px, 5vw, 52px); line-height: 1.12; letter-spacing: -.03em; margin-bottom: 18px; }
+  h1 .hl { color: var(--accent); }
+  .sub { font-size: 18px; color: var(--muted); max-width: 52ch; margin-bottom: 28px; }
+  .sub code { background: #f3f4f6; padding: 1px 6px; border-radius: 5px; font-size: 16px; color: var(--ink); }
+  .cta-row { display: flex; gap: 12px; flex-wrap: wrap; }
+  .btn { display: inline-block; padding: 12px 22px; border-radius: 10px; font-weight: 700; font-size: 15px; }
+  .btn:hover { text-decoration: none; }
+  .btn-primary { background: var(--ink); color: #fff; }
+  .btn-primary:hover { background: #000; }
+  .btn-ghost { border: 1px solid var(--line); color: var(--ink); background: #fff; }
+  .btn-ghost:hover { background: var(--soft); }
+  .hero-note { margin-top: 16px; font-size: 14px; color: var(--muted); }
+
+  /* terminal */
+  .terminal { background: var(--term); border-radius: 14px; overflow: hidden; box-shadow: 0 24px 48px -16px rgba(15,23,42,.35); }
+  .term-bar { display: flex; gap: 7px; padding: 12px 16px; background: #1e293b; }
+  .dot { width: 11px; height: 11px; border-radius: 50%; }
+  .dot.r { background: #f87171; } .dot.y { background: #fbbf24; } .dot.g { background: #34d399; }
+  .term-body { padding: 18px 20px 22px; font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: 13.5px; line-height: 1.75; color: #e2e8f0; overflow-x: auto; white-space: pre; }
+  .term-body .cmd { color: #7dd3fc; }
+  .term-body .out-h { color: #fbbf24; }
+  .term-body .val { color: #a5f3fc; }
+
+  /* sections */
+  section { padding: 56px 0; }
+  section.soft { background: var(--soft); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+  h2 { font-size: 28px; letter-spacing: -.02em; margin-bottom: 10px; }
+  .sec-sub { color: var(--muted); margin-bottom: 32px; max-width: 62ch; }
+  .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .card { background: #fff; border: 1px solid var(--line); border-radius: 14px; padding: 24px; }
+  .card h3 { font-size: 17px; margin-bottom: 8px; }
+  .card p { font-size: 15px; color: var(--muted); }
+  .card code { background: #f3f4f6; padding: 1px 6px; border-radius: 5px; font-size: 13.5px; color: var(--ink); }
+  .num { display: inline-flex; width: 34px; height: 34px; border-radius: 9px; background: var(--accent-soft); color: var(--accent); font-weight: 800; align-items: center; justify-content: center; margin-bottom: 14px; }
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+  .step { border: 1px solid var(--line); border-radius: 14px; padding: 24px; background: #fff; }
+  .step p { font-size: 15px; color: var(--muted); }
+  .step pre { background: var(--term); color: #e2e8f0; border-radius: 10px; padding: 14px 16px; font-size: 13px; overflow-x: auto; margin-top: 12px; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  pre.code { background: var(--term); color: #e2e8f0; border-radius: 14px; padding: 22px 24px; font-size: 14px; line-height: 1.7; overflow-x: auto; font-family: ui-monospace, Menlo, Consolas, monospace; }
+  pre.code .k { color: #c084fc; } pre.code .t { color: #7dd3fc; } pre.code .c { color: #64748b; font-style: italic; } pre.code .s { color: #fbbf24; }
+  .cta-band { background: var(--ink); color: #fff; border-radius: 18px; padding: 44px; text-align: center; }
+  .cta-band h2 { color: #fff; }
+  .cta-band p { color: #9ca3af; margin-bottom: 24px; }
+  .cta-band .btn-primary { background: #fff; color: var(--ink); }
+  footer { padding: 36px 0 48px; color: var(--muted); font-size: 14px; display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; }
+
+  @media (max-width: 860px) {
+    .hero-grid { grid-template-columns: 1fr; gap: 32px; }
+    header.hero { padding: 48px 0; }
+    .grid3, .steps { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .cta-band { padding: 32px 20px; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-in">
+    <a class="logo" href="#" style="text-decoration:none"><span class="logo-badge">P</span> pbo</a>
+    <div class="nav-links">
+      <a href="#fitur">Fitur</a>
+      <a href="#cara-kerja">Cara Kerja</a>
+      <a href="#kode">Kode</a>
+      <a href="#docs">Docs</a>
+    </div>
+    <div class="nav-right">
+      <a class="gh-link" href="https://github.com/dezzorigin/pbo" aria-label="Lihat di GitHub">
+        <svg viewBox="0 0 16 16" fill="currentColor" aria-hidden="true"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </div>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap hero-grid">
+    <div>
+      <span class="eyebrow">Java · PBO · Inheritance</span>
+      <h1>Dari lingkaran<br>ke <span class="hl">silinder.</span></h1>
+      <p class="sub">Contoh inheritance Java yang kecil dan lengkap: <code>Circle</code> jadi
+      induk, <code>CylinderS</code> mewarisi dan menambah tinggi, <code>Main</code>
+      menjalankan demonya. Tiga file, nol dependensi, output terverifikasi.</p>
+      <div class="cta-row">
+        <a class="btn btn-primary" href="https://github.com/dezzorigin/pbo">Lihat di GitHub</a>
+        <a class="btn btn-ghost" href="#cara-kerja">Cara menjalankan</a>
+      </div>
+      <p class="hero-note">Butuh JDK 17+ · teruji di Temurin 21 · MIT License</p>
+    </div>
+    <div class="terminal" aria-label="Contoh output program">
+      <div class="term-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span></div>
+      <div class="term-body"><span class="cmd">$ javac -d out *.java &amp;&amp; java -cp out Main</span>
+<span class="out-h">=== Silinder 1 (Default) ===</span>
+Radius : <span class="val">1.0</span>
+Tinggi : <span class="val">10.0</span>
+Volume : <span class="val">31.41592653589793</span>
+
+<span class="out-h">=== Silinder 2 (Custom) ===</span>
+Radius : <span class="val">7.0</span>
+Tinggi : <span class="val">15.0</span>
+Volume : <span class="val">2309.070600388498</span></div>
+    </div>
+  </div>
+</header>
+
+<section id="fitur" class="soft">
+  <div class="wrap">
+    <h2>Kenapa contoh ini cukup</h2>
+    <p class="sec-sub">Satu konsep PBO, satu contoh yang bisa dibaca habis dalam sekali duduk — dan benar-benar jalan.</p>
+    <div class="grid3">
+      <div class="card">
+        <h3>Inheritance sungguhan</h3>
+        <p><code>CylinderS extends Circle</code>: radius, warna, dan <code>getArea()</code> diwarisi — tidak ditulis ulang. Volume memakai <code>super.getArea() × height</code>.</p>
+      </div>
+      <div class="card">
+        <h3>Enkapsulasi rapi</h3>
+        <p>Field privat (<code>radius</code>, <code>color</code>, <code>height</code>) diekspos lewat getter/setter. Konstruktor default + custom di kedua kelas.</p>
+      </div>
+      <div class="card">
+        <h3>Angka yang bisa dicek</h3>
+        <p>Volume = π × r² × h. Silinder 1: π × 1² × 10 = 31,4159… Silinder 2: π × 7² × 15 = 2309,0706… CI memverifikasi keduanya tiap push.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="cara-kerja">
+  <div class="wrap">
+    <h2>Cara kerja</h2>
+    <p class="sec-sub">Tiga langkah, tanpa build tool, tanpa dependensi.</p>
+    <div class="steps">
+      <div class="step">
+        <span class="num">1</span>
+        <h3>Compile</h3>
+        <p>Semua file dikompilasi ke folder <code>out/</code>.</p>
+        <pre>javac -d out *.java</pre>
+      </div>
+      <div class="step">
+        <span class="num">2</span>
+        <h3>Jalankan</h3>
+        <p><code>Main</code> membuat dua silinder dan mencetak volumenya.</p>
+        <pre>java -cp out Main</pre>
+      </div>
+      <div class="step">
+        <span class="num">3</span>
+        <h3>Cek angka</h3>
+        <p>Bandingkan output dengan rumus π × r² × h. Atau biarkan CI yang mengeceknya.</p>
+        <pre>./run.sh</pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="kode" class="soft">
+  <div class="wrap">
+    <h2>Intinya ada di sini</h2>
+    <p class="sec-sub"><code>CylinderS.java</code> — seluruh "inheritance"-nya terjadi di file ini.</p>
+    <pre class="code"><span class="k">public class</span> <span class="t">CylinderS</span> <span class="k">extends</span> <span class="t">Circle</span> {
+    <span class="k">private double</span> height;
+
+    <span class="c">// konstruktor default: radius 1.0 dari super(), tinggi 10.0</span>
+    <span class="k">public</span> <span class="t">CylinderS</span>() {
+        <span class="k">super</span>();
+        <span class="k">this</span>.height = <span class="s">10.0</span>;
+    }
+
+    <span class="k">public</span> <span class="t">CylinderS</span>(<span class="k">double</span> r, <span class="k">double</span> h) {
+        <span class="k">super</span>(r);
+        <span class="k">this</span>.height = h;
+    }
+
+    <span class="k">public double</span> <span class="t">getVolume</span>() {
+        <span class="k">return super</span>.<span class="t">getArea</span>() * <span class="k">this</span>.height;
+    }
+}</pre>
+    <p style="margin-top:20px"><a href="https://github.com/dezzorigin/pbo/blob/main/docs/class-diagram.html">Lihat diagram kelas →</a></p>
+  </div>
+</section>
+
+<section id="docs">
+  <div class="wrap">
+    <h2>Dokumentasi</h2>
+    <p class="sec-sub">Semua dokumen ada di repo, ditulis sesuai isi sebenarnya — bukan template.</p>
+    <div class="grid3">
+      <div class="card">
+        <h3><a href="https://github.com/dezzorigin/pbo/blob/main/README.md">README</a></h3>
+        <p>Cara menjalankan, contoh output asli, struktur proyek, dan changelog v1.1.0.</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/dezzorigin/pbo/blob/main/PRD.md">PRD</a></h3>
+        <p>Latar belakang tugas, ruang lingkup, persyaratan fungsional tiap kelas, dan kriteria keberhasilan.</p>
+      </div>
+      <div class="card">
+        <h3><a href="https://github.com/dezzorigin/pbo/blob/main/docs/usage.md">Panduan pakai</a></h3>
+        <p>Syarat JDK, compile &amp; run langkah demi langkah, latihan ubah angka sendiri, dan troubleshooting.</p>
+      </div>
+    </div>
+    <div style="margin-top:32px">
+      <div class="cta-band">
+        <h2>Coba sendiri dalam 30 detik</h2>
+        <p>Clone, compile, jalankan — tidak ada yang perlu di-install selain JDK.</p>
+        <a class="btn btn-primary" href="https://github.com/dezzorigin/pbo">github.com/dezzorigin/pbo</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap" style="display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; padding:0;">
+    <span>pbo v1.1.0 · tugas PBO — Nabil Aulia Dika (dezzorigin)</span>
+    <span>MIT License · <a href="https://github.com/dezzorigin/pbo">GitHub</a></span>
+  </div>
+</footer>
+
+</body>
+</html>
