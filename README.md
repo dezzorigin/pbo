@@ -8,7 +8,7 @@ menjalankan dua contoh silinder dan mencetak volumenya.
 ![landing](docs/screenshots/1-landing-desktop.png)
 
 > video demo (tanpa suara, direkam headless): [docs/demo.mp4](docs/demo.mp4)
-> halaman dokumentasi live: https://pbo.pages.dev
+> halaman dokumentasi live: https://pbo-java.pages.dev
 
 ## cara menjalankan
 
