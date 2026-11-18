@@ -1,90 +1,111 @@
-# PRD — Pbo
+# PRD — pbo
 
-## 1. Informasi Proyek
+## 1. Informasi proyek
 
-| Field | Nilai |
+| field | nilai |
 |---|---|
-| Nama Proyek | Pbo |
-| Tech Stack | Static Web |
-| Status | Dalam pengembangan |
-| Penanggung Jawab | Nabil Aulia Dika |
-| Versi Dokumen | 1.0 |
-| Tanggal | 2026 |
+| nama proyek | pbo |
+| bahasa | Java (tanpa framework, tanpa dependensi) |
+| JDK | 17+ (teruji Temurin 21.0.13) |
+| status | selesai — demo inheritance yang jalan |
+| penanggung jawab | Nabil Aulia Dika |
+| versi dokumen | 2.0 (ditulis ulang 2026-11-18) |
+| tanggal | 2026-11-18 |
 
-## 2. Latar Belakang
+> catatan jujur: PRD v1.0 (2026-11-05) adalah template generik hasil
+> bulk-push — mengklaim proyek ini "Static Web" dengan `npm install`.
+> dokumen ini menggantikannya sepenuhnya dengan isi yang sesuai repo.
 
-Proyek ini dikembangkan sebagai bagian dari portofolio dan kebutuhan operasional. Dokumen ini mengikuti standar PRD nasional agar ruang lingkup, fitur, dan kriteria keberhasilan terdefinisi dengan jelas.
+## 2. Latar belakang
 
-## 3. Masalah yang Diselesaikan
+tugas kuliah Pemrograman Berorientasi Objek (PBO): mendemonstrasikan
+**inheritance** — satu kelas anak yang memakai ulang (reuse) field dan method
+kelas induk, lalu menambah perilakunya sendiri. contoh yang dipakai adalah
+geometri yang sudah dikenal semua orang: lingkaran → silinder.
 
-Pengguna membutuhkan solusi digital yang efisien, terukur, dan mudah dipelihara untuk kebutuhan yang ditangani oleh proyek ini.
+## 3. Masalah yang diselesaikan
 
-## 4. Tujuan & Sasaran
+mahasiswa PBO butuh contoh inheritance yang kecil, bisa dibaca dalam sekali
+duduk, dan benar-benar bisa di-compile + dijalankan — bukan potongan kode di
+slide. repo ini contoh itu: 3 file, 0 dependensi, output terverifikasi.
 
-- Menyediakan fungsionalitas inti secara andal.
-- Menjaga kualitas kode dan dokumentasi.
-- Memudahkan onboarding kontributor baru.
+## 4. Tujuan & sasaran
 
-## 5. Ruang Lingkup
+- `Circle` mendefinisikan lingkaran: radius, warna, luas.
+- `CylinderS` mewarisi `Circle` dan menambah tinggi + volume.
+- `Main` mendemonstrasikan keduanya dengan output yang bisa dicek angkanya.
+- repo bersih: tanpa artefak compile (`.class`) yang ter-commit.
 
-### In Scope
-- Fitur inti aplikasi sesuai struktur repo.
-- Setup & konfigurasi pengembangan lokal.
-- Dokumentasi (README + PRD).
+## 5. Ruang lingkup
 
-### Out of Scope
-- Infrastruktur production (kecuali disebutkan).
-- Integrasi pihak ketiga yang belum dikonfigurasi.
+### in scope
+- 3 kelas Java: `Circle`, `CylinderS`, `Main`.
+- compile + run dengan `javac`/`java` standar, tanpa build tool.
+- CI yang meng-compile, menjalankan demo, dan memverifikasi angka output.
+- dokumentasi (README, arsitektur, diagram kelas, panduan) + landing page.
 
-## 6. Fitur & Persyaratan Fungsional
+### out of scope
+- build tool (Maven/Gradle) — sengaja tidak dipakai, programnya terlalu kecil.
+- unit test framework — verifikasi dilakukan CI lewat output `Main` itu sendiri.
+- fitur baru (input interaktif, GUI, dsb.) — ini contoh tugas, bukan produk.
 
-Struktur proyek (file/direktori utama):
-- Circle.class
-- Circle.java
-- CylinderS.class
-- CylinderS.java
-- LICENSE
-- Main.class
-- Main.java
-- PRD.md
-- README.md
+## 6. Fitur & persyaratan fungsional
 
-## 7. Persyaratan Non-Fungsional
+### Circle (kelas induk)
+- field privat: `radius` (double), `color` (String).
+- konstruktor: default (r=1.0, "red"), `Circle(r)`, `Circle(r, c)`.
+- getter/setter radius & warna.
+- `getArea()` → π × r².
 
-- **Performa:** responsif untuk penggunaan normal.
-- **Keamanan:** rahasia (`.env`) tidak boleh ter-commit; gunakan `.env.example`.
-- **Maintainability:** kode terstruktur, terdokumentasi.
-- **Portabilitas:** dapat dijalankan di Linux/macOS/Windows (sesuai stack).
+### CylinderS extends Circle (kelas anak)
+- field privat tambahan: `height` (double).
+- konstruktor: default (r=1.0, h=10.0 via `super()`), `CylinderS(r, h)`.
+- getter/setter tinggi.
+- `getVolume()` → `super.getArea()` × height (reuse method induk, bukan
+  hitung ulang π × r² sendiri).
 
-## 8. Arsitektur & Tech Stack
+### Main (demo)
+- silinder 1: default → r=1.0, h=10.0, volume 31.41592653589793.
+- silinder 2: `CylinderS(7.0, 15.0)` → volume 2309.070600388498.
+- mencetak radius, tinggi, dan volume masing-masing silinder.
 
-Static Web
+## 7. Persyaratan non-fungsional
 
-## 9. Milestone / Roadmap
+- **portabilitas:** jalan di Linux/macOS/Windows selama ada JDK 17+.
+- **tanpa dependensi:** tidak ada library, tidak ada network saat run.
+- **kebersihan repo:** `*.class`, `out/`, dan artefak IDE tidak boleh ter-commit
+  (dijaga `.gitignore` + step CI yang gagal kalau ada `.class` terlacak).
+- **keterbacaan:** kode + komentar secukupnya, penamaan mengikuti konvensi Java.
 
-| Fase | Status |
+## 8. Arsitektur & tech stack
+
+Java murni, 3 file di root repo. `Main` → memakai `CylinderS` → mewarisi
+`Circle`. detail: [docs/architecture.md](docs/architecture.md), diagram:
+[docs/class-diagram.html](docs/class-diagram.html).
+
+## 9. Milestone
+
+| fase | status |
 |---|---|
-| Inisialisasi & scaffolding | ✅ |
-| Pengembangan fitur inti | 🔄 |
-| Testing & QA | ⏳ |
-| Deployment | ⏳ |
-| Dokumentasi | ✅ (README + PRD) |
+| versi awal (3 kelas + README/PRD template) | ✅ 2026-11-05 |
+| proper v1.1.0: bug `z` diperbaiki, `.class` dibersihkan, CI, docs, landing | ✅ 2026-11-18 |
 
-## 10. Risiko & Mitigasi
+## 10. Risiko & mitigasi
 
-| Risiko | Mitigasi |
+| risiko | mitigasi |
 |---|---|
-| Konfigurasi env bocor | `.gitignore` + `.env.example` |
-| Dependency usang | Audit berkala (`npm audit` / `pip list --outdated`) |
-| Build artifact besar | Tambahkan ke `.gitignore` |
+| artefak compile (`.class`) ke-commit lagi | `.gitignore` `*.class` + step CI yang memblokir |
+| JDK tidak ada di mesin pengguna | README menyebut JDK 17+ eksplisit; CI memakai Temurin 21 |
+| angka output berubah diam-diam | CI memverifikasi dua angka volume secara eksak |
 
-## 11. Kriteria Keberhasilan
+## 11. Kriteria keberhasilan
 
-- Aplikasi berjalan tanpa error di lingkungan dev.
-- README & PRD lengkap dan up-to-date.
-- Tidak ada secret yang ter-commit.
+- `javac` sukses tanpa error, `java -cp out Main` keluar 0.
+- output berisi volume 31.41592653589793 dan 2309.070600388498.
+- tidak ada file `.class` di tree repo.
+- CI hijau di main.
 
 ## 12. Lampiran
 
-- Struktur: lihat README.md
-- Lisensi: MIT (LICENSE)
+- struktur: lihat README.md
+- lisensi: MIT (LICENSE)

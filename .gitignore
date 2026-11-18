@@ -1,9 +1,26 @@
+# Java
+*.class
+*.jar
+*.war
+*.ear
+out/
+target/
+bin/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.code-workspace
+nbproject/
+.netbeans/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Env / secrets
 .env
 .env.*
-node_modules/
-.next/
-__pycache__/
-.venv/
-dist/
-build/
-.DS_Store

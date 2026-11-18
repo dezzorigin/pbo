@@ -7,7 +7,6 @@ public class Circle {
         this.radius = 1.0;
         this.color = "red";
     }
-z
     public Circle(double r) {
         this.radius = r;
         this.color = "red";
